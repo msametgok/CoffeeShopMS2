@@ -14,4 +14,21 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>src/icons/icons8-cancel-filled-40.png</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Icons/icons8-cancel-filled-40.png</locationURI>
+		</link>
+		<link>
+			<name>src/icons/icons8-lock-40.png</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Icons/icons8-lock-40.png</locationURI>
+		</link>
+		<link>
+			<name>src/icons/icons8-user-male-40.png</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Icons/icons8-user-male-40.png</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>
