@@ -176,7 +176,9 @@ public class SignMenu extends JFrame {
 					autmenu.setVisible(true);
 				}
 				else if(isStaff) {
-					JOptionPane.showMessageDialog(null,"Staff giriþi");
+					dispose();
+					Sale salescreen = new Sale();
+					salescreen.setVisible(true);
 				}
 				else {
 					JOptionPane.showMessageDialog(null, "Wrong Username or Password. Try Again.");
@@ -211,6 +213,17 @@ public class SignMenu extends JFrame {
 		panel_2.add(pwdPassword);
 		panel_2.add(separator_1);
 		panel_2.add(btnLogin);
+		
+		JButton btnNewButton = new JButton("New button");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				Sale sl= new Sale();
+				sl.setVisible(true);
+			}
+		});
+		btnNewButton.setBounds(150, 381, 89, 23);
+		panel_2.add(btnNewButton);
 		contentPane.add(panel);
 		
 		JLabel label = new JLabel("");

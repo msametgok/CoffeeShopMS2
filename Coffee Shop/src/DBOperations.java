@@ -50,7 +50,7 @@ public class DBOperations {
 			return rs.next();
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 			return false;
 		}
@@ -119,10 +119,10 @@ public ArrayList<Employee> listemployees() {
 
 public void addEmployee(String name, String lastname, double wage, String username, String password, boolean authority, boolean situation) {
     
-    String sorgu = "Insert Into employee (Name,LastName,Wage,UserName,Password,Authority,Situation) VALUES (?,?,?,?,?,?,?) ";  
+    String myQuery = "Insert Into employee (Name,LastName,Wage,UserName,Password,Authority,Situation) VALUES (?,?,?,?,?,?,?) ";  
      
         try {
-			preparedStatement = con.prepareStatement(sorgu);
+			preparedStatement = con.prepareStatement(myQuery);
 			//preparedStatement.setString(1,"null");
 	        preparedStatement.setString(1, name);
 	        preparedStatement.setString(2, lastname);
@@ -187,6 +187,93 @@ public void authorizeEmployee(int id) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	
+}
+
+public ArrayList<Product> listproducts() {
+	
+		ArrayList<Product> products = new ArrayList<Product>();
+	
+		try {
+			
+			statement = con.createStatement();
+			String myQuery =  "SELECT P_ID,Cat_Name,P_Name,P_Price,Stock from products p inner join category c on p.Cat_ID=c.Cat_ID"; 
+	        ResultSet rs =  statement.executeQuery(myQuery);
+	        
+	        while(rs.next()) {
+	            int p_id = rs.getInt(1);
+	            String category = rs.getString(2);
+	            String prdname = rs.getString(3);
+	            double price  = rs.getDouble(4);
+	            int stock = rs.getInt(5);
+	            
+	            products.add(new Product(p_id, category, prdname, price,stock));     
+	            
+	        }
+	        
+	        return products;
+			
+		} catch (SQLException e) {
+			
+			e.printStackTrace();
+			return null;
+		}
+}
+
+public void addProduct(int category, String prdname, double price, int stock) {
+	
+	String myQuery = "Insert Into products (Cat_ID,P_Name,P_Price,Stock) VALUES (?,?,?,?)";  
+    
+    try {
+		preparedStatement = con.prepareStatement(myQuery);
+		
+        preparedStatement.setInt(1, category);
+        preparedStatement.setString(2, prdname);
+        preparedStatement.setDouble(3,price);
+        preparedStatement.setInt(4, stock);
+        
+        
+        preparedStatement.executeUpdate();
+		
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	
+}
+
+public void deleteProduct(String prdname) {
+	
+	String myQuery = "CALL DeleteProduct(?)";
+	
+	try {
+		preparedStatement = con.prepareStatement(myQuery);
+		
+		preparedStatement.setString(1, prdname);
+		preparedStatement.executeQuery();
+		
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	
+}
+
+public void updateProduct(String prdname, double price) {
+	
+String myQuery = "CALL UpdateProduct(?,?)";
+	
+	try {
+		preparedStatement = con.prepareStatement(myQuery);
+		
+		preparedStatement.setString(1, prdname);
+		preparedStatement.setDouble(2, price);
+		preparedStatement.executeQuery();
+		
+	} catch (SQLException e) {
+		
+		e.printStackTrace();
+	}
 	
 }
 	
