@@ -21,6 +21,11 @@
 			<locationURI>PARENT-2-PROJECT_LOC/Icons/icons8-cancel-filled-40.png</locationURI>
 		</link>
 		<link>
+			<name>src/icons/icons8-google-web-search-filled-40.png</name>
+			<type>1</type>
+			<locationURI>PARENT-2-PROJECT_LOC/Icons/icons8-google-web-search-filled-40.png</locationURI>
+		</link>
+		<link>
 			<name>src/icons/icons8-lock-40.png</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/Icons/icons8-lock-40.png</locationURI>

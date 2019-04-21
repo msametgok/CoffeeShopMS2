@@ -35,6 +35,8 @@ import java.awt.event.MouseMotionAdapter;
 
 public class SignMenu extends JFrame {
 
+	DBOperations db = new DBOperations();
+	
 	private JPanel contentPane;
 	private JTextField txtUserName;
 	private JPasswordField pwdPassword;
@@ -159,6 +161,29 @@ public class SignMenu extends JFrame {
 		pwdPassword.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		
 		JButton btnLogin = new JButton("Login");
+		btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				String username = txtUserName.getText();
+				String password = new String(pwdPassword.getPassword());
+				
+				boolean isManager = db.loginmanager(username, password);
+				boolean isStaff = db.loginstaff(username, password);
+				
+				if(isManager) {
+					dispose();
+					AuthorizedMenu autmenu = new AuthorizedMenu();
+					autmenu.setVisible(true);
+				}
+				else if(isStaff) {
+					JOptionPane.showMessageDialog(null,"Staff giriþi");
+				}
+				else {
+					JOptionPane.showMessageDialog(null, "Wrong Username or Password. Try Again.");
+				}
+				
+			}
+		});
 		btnLogin.setBounds(262, 274, 116, 39);
 		btnLogin.setFont(new Font("Segoe UI", Font.PLAIN, 14));
 		btnLogin.setForeground(new Color(255, 255, 255));
