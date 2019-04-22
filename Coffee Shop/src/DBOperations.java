@@ -276,6 +276,8 @@ String myQuery = "CALL UpdateProduct(?,?)";
 	}
 	
 }
+
+
 	
 	
 }
