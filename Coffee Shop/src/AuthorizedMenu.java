@@ -214,6 +214,13 @@ public class AuthorizedMenu extends JFrame {
 		panel_1.add(btnListProducts);
 		
 		JButton btnSwitch = new JButton("Switch to Sale");
+		btnSwitch.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+				Sale salescreen = new Sale();
+				salescreen.setVisible(true);
+			}
+		});
 		btnSwitch.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseEntered(MouseEvent e) {
@@ -230,7 +237,7 @@ public class AuthorizedMenu extends JFrame {
 		btnSwitch.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		btnSwitch.setBorder(null);
 		btnSwitch.setBackground(new Color(75, 0, 130));
-		btnSwitch.setBounds(0, 311, 217, 36);
+		btnSwitch.setBounds(0, 432, 217, 36);
 		panel_1.add(btnSwitch);
 		
 		JButton btnAddEmployee = new JButton("Add New Employee");
@@ -306,14 +313,14 @@ public class AuthorizedMenu extends JFrame {
 		pnlAddEmployee.setBorder(new MatteBorder(4, 0, 4, 4, (Color) new Color(75, 0, 130)));
 		pnlAddEmployee.setVisible(false);
 		
+		pnlAddProduct = new JPanel();
+		pnlAddProduct.setBorder(null);
+		pnlAddProduct.setVisible(false);
+		
 		pnlProduct = new JPanel();
 		pnlProduct.setBackground(new Color(255, 255, 255));
 		pnlProduct.setBorder(new MatteBorder(4, 0, 4, 4, (Color) new Color(75, 0, 130)));
 		pnlProduct.setVisible(false);
-		
-		pnlAddProduct = new JPanel();
-		pnlAddProduct.setBorder(null);
-		pnlAddProduct.setVisible(false);
 		
 		pnlEmployee = new JPanel();
 		pnlEmployee.setVisible(false);
@@ -339,7 +346,7 @@ public class AuthorizedMenu extends JFrame {
 			      
 			       }
 			       else {
-			           int id = (int)model.getValueAt(selectedrow,0);
+			           int id = (int)empTable.getValueAt(selectedrow,0);
 			           
 			           db.deleteEmployee(id);
 			           
@@ -388,7 +395,7 @@ public class AuthorizedMenu extends JFrame {
 			      
 			       }
 			       else {
-			           int id = (int)model.getValueAt(selectedrow,0);
+			           int id = (int)empTable.getValueAt(selectedrow,0);
 			          
 			           
 			           
@@ -521,7 +528,7 @@ public class AuthorizedMenu extends JFrame {
 			      
 			       }
 			       else {
-			           int id = (int)model.getValueAt(selectedrow,0);
+			           int id = (int)empTable.getValueAt(selectedrow,0);
 			           double wage = Double.parseDouble(JOptionPane.showInputDialog("Enter wage"));
 			           
 			           
@@ -566,6 +573,198 @@ public class AuthorizedMenu extends JFrame {
 		label_2.setIcon(new ImageIcon(AuthorizedMenu.class.getResource("/icons/icons8-cancel-filled-40.png")));
 		label_2.setBounds(572, 2, 40, 47);
 		pnlEmployee.add(label_2);
+		pnlProduct.setBounds(0, 0, 616, 479);
+		layeredPane.add(pnlProduct);
+		pnlProduct.setLayout(null);
+		
+		JButton btnDeleteProduct = new JButton("Delete Product");
+		btnDeleteProduct.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				int selectedrow = prdTable.getSelectedRow();
+			       
+			       if (selectedrow == -1) {
+			           if (model.getRowCount() == 0 ) {
+			               JOptionPane.showMessageDialog(null,"Table is empty.");
+			           }
+			           else {
+			        	   JOptionPane.showMessageDialog(null,"Please select a row.");
+			           }
+			      
+			       }
+			       else {
+			           String prdname = (String) prdTable.getValueAt(selectedrow,2);
+			           
+			           
+			           db.deleteProduct(prdname);
+			           
+			           JOptionPane.showMessageDialog(null, "A Product is deleted.");
+			           
+			           model.setRowCount(0);
+			           
+			           ArrayList<Product> products = new ArrayList<Product>();
+			           
+			           products = db.listproducts();
+						
+						if (products != null ) {
+				            
+				            for (Product prd : products) {
+				                Object[] addProduct = {prd.getProductID(),prd.getCategory(),prd.getPrdName(),prd.getPrice()};
+				                
+				                model.addRow(addProduct);
+				               
+				            }
+				            
+				        }
+			           
+			       }
+			}
+		});
+		btnDeleteProduct.setForeground(Color.WHITE);
+		btnDeleteProduct.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		btnDeleteProduct.setBorder(null);
+		btnDeleteProduct.setBackground(new Color(75, 0, 130));
+		btnDeleteProduct.setBounds(89, 406, 144, 45);
+		pnlProduct.add(btnDeleteProduct);
+		
+		JLabel label = new JLabel("");
+		label.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				System.exit(0);
+			}
+		});
+		label.setIcon(new ImageIcon(AuthorizedMenu.class.getResource("/icons/icons8-cancel-filled-40.png")));
+		label.setBounds(572, 2, 40, 47);
+		pnlProduct.add(label);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBorder(new MatteBorder(4, 0, 4, 0, (Color) new Color(75, 0, 130)));
+		scrollPane_1.setBounds(0, 83, 612, 257);
+		pnlProduct.add(scrollPane_1);
+		
+		prdTable = new JTable();
+		prdTable.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"Product ID", "Category", "Product Name", "Price"
+			}
+		) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+			boolean[] columnEditables = new boolean[] {
+				false, false, false, false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		});
+		scrollPane_1.setViewportView(prdTable);
+		prdTable.setForeground(new Color(105, 105, 105));
+		prdTable.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		
+		txtSearchPrd = new JTextField();
+		txtSearchPrd.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				
+				String search = txtSearchPrd.getText();
+				
+				TableRowSorter<DefaultTableModel> tr = new TableRowSorter<DefaultTableModel>(model);
+		        prdTable.setRowSorter(tr);
+		        tr.setRowFilter(RowFilter.regexFilter(search));
+
+		        
+			}
+		});
+		
+		txtSearchPrd.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				if(txtSearchPrd.getText().equals("Search")) {
+					txtSearchPrd.setText("");
+				}
+			}
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(txtSearchPrd.getText().equals("")) {
+					txtSearchPrd.setText("Search");
+				}
+			}
+		});
+		txtSearchPrd.setText("Search");
+		txtSearchPrd.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		txtSearchPrd.setColumns(10);
+		txtSearchPrd.setBorder(null);
+		txtSearchPrd.setBounds(89, 34, 438, 30);
+		pnlProduct.add(txtSearchPrd);
+		
+		JLabel label_6 = new JLabel("");
+		label_6.setIcon(new ImageIcon(AuthorizedMenu.class.getResource("/icons/icons8-google-web-search-filled-40.png")));
+		label_6.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		label_6.setBounds(34, 27, 40, 44);
+		pnlProduct.add(label_6);
+		
+		JSeparator separator_1 = new JSeparator();
+		separator_1.setForeground(new Color(75, 0, 130));
+		separator_1.setBounds(90, 64, 437, 4);
+		pnlProduct.add(separator_1);
+		
+		JButton btnUpdatePrice = new JButton("Update Price");
+		btnUpdatePrice.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				int selectedrow = prdTable.getSelectedRow();
+				
+				//JOptionPane.showMessageDialog(null, selectedrow);
+			       
+			       if (selectedrow == -1) {
+			           if (model.getRowCount() == 0 ) {
+			               JOptionPane.showMessageDialog(null,"Table is empty.");
+			           }
+			           else {
+			        	   JOptionPane.showMessageDialog(null,"Please select a row.");
+			           }
+			      
+			       }
+			       else {
+			           String prdname = (String) prdTable.getValueAt(selectedrow,2);
+			           JOptionPane.showMessageDialog(null, prdname);
+			           double price = Double.parseDouble(JOptionPane.showInputDialog("Enter price"));
+			           
+			           db.updateProduct(prdname,price);
+			           
+			           JOptionPane.showMessageDialog(null, prdname + "'s price is updated.");
+			           
+			           model.setRowCount(0);
+			           
+			           ArrayList<Product> products = new ArrayList<Product>();
+			           
+			           products = db.listproducts();
+						
+						if (products != null ) {
+				            
+				            for (Product prd : products) {
+				                Object[] addProduct = {prd.getProductID(),prd.getCategory(),prd.getPrdName(),prd.getPrice()};
+				                
+				                model.addRow(addProduct);
+				               
+				            }
+				            
+				        }
+			           
+			       }
+			}
+		});
+		btnUpdatePrice.setForeground(Color.WHITE);
+		btnUpdatePrice.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		btnUpdatePrice.setBorder(null);
+		btnUpdatePrice.setBackground(new Color(75, 0, 130));
+		btnUpdatePrice.setBounds(248, 406, 144, 45);
+		pnlProduct.add(btnUpdatePrice);
 		pnlAddProduct.setBackground(Color.WHITE);
 		pnlAddProduct.setBounds(0, 0, 616, 479);
 		layeredPane.add(pnlAddProduct);
@@ -680,196 +879,6 @@ public class AuthorizedMenu extends JFrame {
 		separator_7.setBackground(new Color(75, 0, 130));
 		separator_7.setBounds(239, 250, 243, 2);
 		pnlAddProduct.add(separator_7);
-		pnlProduct.setBounds(0, 0, 616, 479);
-		layeredPane.add(pnlProduct);
-		pnlProduct.setLayout(null);
-		
-		JButton btnDeleteProduct = new JButton("Delete Product");
-		btnDeleteProduct.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				int selectedrow = prdTable.getSelectedRow();
-			       
-			       if (selectedrow == -1) {
-			           if (model.getRowCount() == 0 ) {
-			               JOptionPane.showMessageDialog(null,"Table is empty.");
-			           }
-			           else {
-			        	   JOptionPane.showMessageDialog(null,"Please select a row.");
-			           }
-			      
-			       }
-			       else {
-			           String prdname = (String) model.getValueAt(selectedrow,2);
-			           
-			           
-			           db.deleteProduct(prdname);
-			           
-			           JOptionPane.showMessageDialog(null, "A Product is deleted.");
-			           
-			           model.setRowCount(0);
-			           
-			           ArrayList<Product> products = new ArrayList<Product>();
-			           
-			           products = db.listproducts();
-						
-						if (products != null ) {
-				            
-				            for (Product prd : products) {
-				                Object[] addProduct = {prd.getProductID(),prd.getCategory(),prd.getPrdName(),prd.getPrice()};
-				                
-				                model.addRow(addProduct);
-				               
-				            }
-				            
-				        }
-			           
-			       }
-			}
-		});
-		btnDeleteProduct.setForeground(Color.WHITE);
-		btnDeleteProduct.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		btnDeleteProduct.setBorder(null);
-		btnDeleteProduct.setBackground(new Color(75, 0, 130));
-		btnDeleteProduct.setBounds(89, 406, 144, 45);
-		pnlProduct.add(btnDeleteProduct);
-		
-		JLabel label = new JLabel("");
-		label.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				System.exit(0);
-			}
-		});
-		label.setIcon(new ImageIcon(AuthorizedMenu.class.getResource("/icons/icons8-cancel-filled-40.png")));
-		label.setBounds(572, 2, 40, 47);
-		pnlProduct.add(label);
-		
-		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBorder(new MatteBorder(4, 0, 4, 0, (Color) new Color(75, 0, 130)));
-		scrollPane_1.setBounds(0, 83, 612, 257);
-		pnlProduct.add(scrollPane_1);
-		
-		prdTable = new JTable();
-		prdTable.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"Product ID", "Category", "Product Name", "Price"
-			}
-		) {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-			boolean[] columnEditables = new boolean[] {
-				false, false, false, false
-			};
-			public boolean isCellEditable(int row, int column) {
-				return columnEditables[column];
-			}
-		});
-		scrollPane_1.setViewportView(prdTable);
-		prdTable.setForeground(new Color(105, 105, 105));
-		prdTable.setFont(new Font("Segoe UI", Font.BOLD, 14));
-		
-		txtSearchPrd = new JTextField();
-		txtSearchPrd.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				
-				String search = txtSearchPrd.getText();
-				
-				TableRowSorter<DefaultTableModel> tr = new TableRowSorter<DefaultTableModel>(model);
-		        prdTable.setRowSorter(tr);
-		        tr.setRowFilter(RowFilter.regexFilter(search));
-		        
-		        
-		        
-			}
-		});
-		
-		txtSearchPrd.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				if(txtSearchPrd.getText().equals("Search")) {
-					txtSearchPrd.setText("");
-				}
-			}
-			@Override
-			public void focusLost(FocusEvent e) {
-				if(txtSearchPrd.getText().equals("")) {
-					txtSearchPrd.setText("Search");
-				}
-			}
-		});
-		txtSearchPrd.setText("Search");
-		txtSearchPrd.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		txtSearchPrd.setColumns(10);
-		txtSearchPrd.setBorder(null);
-		txtSearchPrd.setBounds(89, 34, 438, 30);
-		pnlProduct.add(txtSearchPrd);
-		
-		JLabel label_6 = new JLabel("");
-		label_6.setIcon(new ImageIcon(AuthorizedMenu.class.getResource("/icons/icons8-google-web-search-filled-40.png")));
-		label_6.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		label_6.setBounds(34, 27, 40, 44);
-		pnlProduct.add(label_6);
-		
-		JSeparator separator_1 = new JSeparator();
-		separator_1.setForeground(new Color(75, 0, 130));
-		separator_1.setBounds(90, 64, 437, 4);
-		pnlProduct.add(separator_1);
-		
-		JButton btnUpdatePrice = new JButton("Update Price");
-		btnUpdatePrice.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				int selectedrow = prdTable.getSelectedRow();
-			       
-			       if (selectedrow == -1) {
-			           if (model.getRowCount() == 0 ) {
-			               JOptionPane.showMessageDialog(null,"Table is empty.");
-			           }
-			           else {
-			        	   JOptionPane.showMessageDialog(null,"Please select a row.");
-			           }
-			      
-			       }
-			       else {
-			           String prdname = (String) model.getValueAt(selectedrow,2);
-			           double price = Double.parseDouble(JOptionPane.showInputDialog("Enter price"));
-			           
-			           db.updateProduct(prdname,price);
-			           
-			           JOptionPane.showMessageDialog(null, prdname + "'s price is updated.");
-			           
-			           model.setRowCount(0);
-			           
-			           ArrayList<Product> products = new ArrayList<Product>();
-			           
-			           products = db.listproducts();
-						
-						if (products != null ) {
-				            
-				            for (Product prd : products) {
-				                Object[] addProduct = {prd.getProductID(),prd.getCategory(),prd.getPrdName(),prd.getPrice()};
-				                
-				                model.addRow(addProduct);
-				               
-				            }
-				            
-				        }
-			           
-			       }
-			}
-		});
-		btnUpdatePrice.setForeground(Color.WHITE);
-		btnUpdatePrice.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		btnUpdatePrice.setBorder(null);
-		btnUpdatePrice.setBackground(new Color(75, 0, 130));
-		btnUpdatePrice.setBounds(248, 406, 144, 45);
-		pnlProduct.add(btnUpdatePrice);
 		pnlAddEmployee.setBackground(Color.WHITE);
 		pnlAddEmployee.setBounds(0, 0, 616, 479);
 		layeredPane.add(pnlAddEmployee);

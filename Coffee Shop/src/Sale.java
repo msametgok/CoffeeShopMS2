@@ -142,6 +142,7 @@ public class Sale extends JFrame {
 					model.setRowCount(0);
 					lblTotal.setText("");
 					
+					JOptionPane.showMessageDialog(null, "Payment completed successfully");
 			            
 			        }
 				}
