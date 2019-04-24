@@ -302,9 +302,6 @@ public class AuthorizedMenu extends JFrame {
 		layeredPane.setBounds(0, 0, 616, 479);
 		panel_2.add(layeredPane);
 		
-		pnlEmployee = new JPanel();
-		pnlEmployee.setVisible(false);
-		
 		pnlAddEmployee = new JPanel();
 		pnlAddEmployee.setBorder(new MatteBorder(4, 0, 4, 4, (Color) new Color(75, 0, 130)));
 		pnlAddEmployee.setVisible(false);
@@ -317,6 +314,258 @@ public class AuthorizedMenu extends JFrame {
 		pnlAddProduct = new JPanel();
 		pnlAddProduct.setBorder(null);
 		pnlAddProduct.setVisible(false);
+		
+		pnlEmployee = new JPanel();
+		pnlEmployee.setVisible(false);
+		pnlEmployee.setBorder(new MatteBorder(4, 0, 4, 4, (Color) new Color(75, 0, 130)));
+		pnlEmployee.setBackground(new Color(255, 255, 255));
+		pnlEmployee.setBounds(0, 0, 616, 479);
+		layeredPane.add(pnlEmployee);
+		pnlEmployee.setLayout(null);
+		
+		JButton btnDeleteEmployee = new JButton("Delete Employee");
+		btnDeleteEmployee.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				int selectedrow = empTable.getSelectedRow();
+			       
+			       if (selectedrow == -1) {
+			           if (model.getRowCount() == 0 ) {
+			               JOptionPane.showMessageDialog(null,"Table is empty.");
+			           }
+			           else {
+			        	   JOptionPane.showMessageDialog(null,"Please select a row.");
+			           }
+			      
+			       }
+			       else {
+			           int id = (int)model.getValueAt(selectedrow,0);
+			           
+			           db.deleteEmployee(id);
+			           
+			           JOptionPane.showMessageDialog(null, "An employee is deleted.");
+			           
+			           model.setRowCount(0);
+			           
+			           ArrayList<Employee> employees = new ArrayList<Employee>();
+			           
+			           employees = db.listemployees();
+						
+						if (employees != null ) {
+				            
+				            for (Employee emp : employees) {
+				                Object[] addEmployee = {emp.getId(),emp.getName(),emp.getLastName(),emp.getWage()};
+				                
+				                model.addRow(addEmployee);
+				               
+				            }
+				            
+				        }
+			           
+			       }
+			}
+		});
+		btnDeleteEmployee.setForeground(Color.WHITE);
+		btnDeleteEmployee.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		btnDeleteEmployee.setBorder(null);
+		btnDeleteEmployee.setBackground(new Color(75, 0, 130));
+		btnDeleteEmployee.setBounds(188, 423, 144, 45);
+		pnlEmployee.add(btnDeleteEmployee);
+		
+		JButton btnAuthorizeEmployee = new JButton("Authorize Employee");
+		btnAuthorizeEmployee.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				 int selectedrow = empTable.getSelectedRow();
+				
+				 if (selectedrow == -1) {
+			           if (model.getRowCount() == 0 ) {
+			               JOptionPane.showMessageDialog(null,"Table is empty.");
+			           }
+			           else {
+			        	   JOptionPane.showMessageDialog(null,"Please select a row.");
+			           }
+			      
+			       }
+			       else {
+			           int id = (int)model.getValueAt(selectedrow,0);
+			          
+			           
+			           
+			           db.authorizeEmployee(id);
+			           
+			           JOptionPane.showMessageDialog(null, "An employee is authorized.");
+			           
+			           model.setRowCount(0);
+			           
+			           ArrayList<Employee> employees = new ArrayList<Employee>();
+			           
+			           employees = db.listemployees();
+						
+						if (employees != null ) {
+				            
+				            for (Employee emp : employees) {
+				                Object[] addEmployee = {emp.getId(),emp.getName(),emp.getLastName(),emp.getWage()};
+				                
+				                model.addRow(addEmployee);
+				               
+				            }
+				            
+				        }
+	
+			       }
+			}
+		});
+		btnAuthorizeEmployee.setForeground(Color.WHITE);
+		btnAuthorizeEmployee.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		btnAuthorizeEmployee.setBorder(null);
+		btnAuthorizeEmployee.setBackground(new Color(75, 0, 130));
+		btnAuthorizeEmployee.setBounds(342, 423, 144, 45);
+		pnlEmployee.add(btnAuthorizeEmployee);
+		
+		txtSearch = new JTextField();
+		txtSearch.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyReleased(KeyEvent e) {
+				
+				String search = txtSearch.getText();
+				
+				TableRowSorter<DefaultTableModel> tr = new TableRowSorter<DefaultTableModel>(model);
+		        
+		        
+		        empTable.setRowSorter(tr);
+		        
+		        
+		        tr.setRowFilter(RowFilter.regexFilter(search));
+			}
+		});
+		txtSearch.addFocusListener(new FocusAdapter() {
+			@Override
+			public void focusGained(FocusEvent e) {
+				
+				if(txtSearch.getText().equals("Search")) {
+					txtSearch.setText("");
+				}
+				
+			}
+			@Override
+			public void focusLost(FocusEvent e) {
+				if(txtSearch.getText().equals("")) {
+					txtSearch.setText("Search");
+				}
+			}
+		});
+		
+		txtSearch.setBorder(null);
+		txtSearch.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		txtSearch.setText("Search");
+		txtSearch.setBounds(89, 34, 438, 30);
+		pnlEmployee.add(txtSearch);
+		txtSearch.setColumns(10);
+		
+		JLabel lblSearch = new JLabel("");
+		lblSearch.setIcon(new ImageIcon(AuthorizedMenu.class.getResource("/icons/icons8-google-web-search-filled-40.png")));
+		lblSearch.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+		lblSearch.setBounds(34, 27, 40, 45);
+		pnlEmployee.add(lblSearch);
+		
+		JSeparator separator = new JSeparator();
+		separator.setForeground(new Color(75, 0, 130));
+		separator.setBounds(90, 64, 437, 4);
+		pnlEmployee.add(separator);
+		
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBorder(new MatteBorder(4, 0, 4, 4, (Color) new Color(75, 0, 130)));
+		scrollPane.setForeground(Color.WHITE);
+		scrollPane.setBackground(new Color(255, 255, 255));
+		scrollPane.setBounds(0, 83, 616, 217);
+		pnlEmployee.add(scrollPane);
+		
+		empTable = new JTable();
+		empTable.setForeground(new Color(105, 105, 105));
+		scrollPane.setViewportView(empTable);
+		empTable.setFont(new Font("Segoe UI", Font.BOLD, 14));
+		empTable.setBorder(null);
+		empTable.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"Id", "Name", "Last Name","Wage"
+			}
+		) {
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = 1L;
+			boolean[] columnEditables = new boolean[] {
+				false, false, false, false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		});
+		
+		JButton btnUpdateWage = new JButton("Update Wage");
+		btnUpdateWage.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				int selectedrow = empTable.getSelectedRow();
+				
+				 if (selectedrow == -1) {
+			           if (model.getRowCount() == 0 ) {
+			               JOptionPane.showMessageDialog(null,"Table is empty.");
+			           }
+			           else {
+			        	   JOptionPane.showMessageDialog(null,"Please select a row.");
+			           }
+			      
+			       }
+			       else {
+			           int id = (int)model.getValueAt(selectedrow,0);
+			           double wage = Double.parseDouble(JOptionPane.showInputDialog("Enter wage"));
+			           
+			           
+			           db.updateEmployee(id,wage);
+			           
+			           JOptionPane.showMessageDialog(null, "An employee is updated.");
+			           
+			           model.setRowCount(0);
+			           
+			           ArrayList<Employee> employees = new ArrayList<Employee>();
+			           
+			           employees = db.listemployees();
+						
+						if (employees != null ) {
+				            
+				            for (Employee emp : employees) {
+				                Object[] addEmployee = {emp.getId(),emp.getName(),emp.getLastName(),emp.getWage()};
+				                
+				                model.addRow(addEmployee);
+				               
+				            }
+				            
+				        }
+	
+			       }
+			}
+		});
+		btnUpdateWage.setForeground(Color.WHITE);
+		btnUpdateWage.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		btnUpdateWage.setBorder(null);
+		btnUpdateWage.setBackground(new Color(75, 0, 130));
+		btnUpdateWage.setBounds(34, 423, 144, 45);
+		pnlEmployee.add(btnUpdateWage);
+		
+		JLabel label_2 = new JLabel("");
+		label_2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				System.exit(0);
+			}
+		});
+		label_2.setIcon(new ImageIcon(AuthorizedMenu.class.getResource("/icons/icons8-cancel-filled-40.png")));
+		label_2.setBounds(572, 2, 40, 47);
+		pnlEmployee.add(label_2);
 		pnlAddProduct.setBackground(Color.WHITE);
 		pnlAddProduct.setBounds(0, 0, 616, 479);
 		layeredPane.add(pnlAddProduct);
@@ -768,255 +1017,6 @@ public class AuthorizedMenu extends JFrame {
 		btnAddEmp.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		btnAddEmp.setBounds(271, 344, 125, 37);
 		pnlAddEmployee.add(btnAddEmp);
-		pnlEmployee.setBorder(new MatteBorder(4, 0, 4, 4, (Color) new Color(75, 0, 130)));
-		pnlEmployee.setBackground(new Color(255, 255, 255));
-		pnlEmployee.setBounds(0, 0, 616, 479);
-		layeredPane.add(pnlEmployee);
-		pnlEmployee.setLayout(null);
-		
-		JButton btnDeleteEmployee = new JButton("Delete Employee");
-		btnDeleteEmployee.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				int selectedrow = empTable.getSelectedRow();
-			       
-			       if (selectedrow == -1) {
-			           if (model.getRowCount() == 0 ) {
-			               JOptionPane.showMessageDialog(null,"Table is empty.");
-			           }
-			           else {
-			        	   JOptionPane.showMessageDialog(null,"Please select a row.");
-			           }
-			      
-			       }
-			       else {
-			           int id = (int)model.getValueAt(selectedrow,0);
-			           
-			           db.deleteEmployee(id);
-			           
-			           JOptionPane.showMessageDialog(null, "An employee is deleted.");
-			           
-			           model.setRowCount(0);
-			           
-			           ArrayList<Employee> employees = new ArrayList<Employee>();
-			           
-			           employees = db.listemployees();
-						
-						if (employees != null ) {
-				            
-				            for (Employee emp : employees) {
-				                Object[] addEmployee = {emp.getId(),emp.getName(),emp.getLastName(),emp.getWage()};
-				                
-				                model.addRow(addEmployee);
-				               
-				            }
-				            
-				        }
-			           
-			       }
-			}
-		});
-		btnDeleteEmployee.setForeground(Color.WHITE);
-		btnDeleteEmployee.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		btnDeleteEmployee.setBorder(null);
-		btnDeleteEmployee.setBackground(new Color(75, 0, 130));
-		btnDeleteEmployee.setBounds(188, 423, 144, 45);
-		pnlEmployee.add(btnDeleteEmployee);
-		
-		JButton btnAuthorizeEmployee = new JButton("Authorize Employee");
-		btnAuthorizeEmployee.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				 int selectedrow = empTable.getSelectedRow();
-				
-				 if (selectedrow == -1) {
-			           if (model.getRowCount() == 0 ) {
-			               JOptionPane.showMessageDialog(null,"Table is empty.");
-			           }
-			           else {
-			        	   JOptionPane.showMessageDialog(null,"Please select a row.");
-			           }
-			      
-			       }
-			       else {
-			           int id = (int)model.getValueAt(selectedrow,0);
-			          
-			           
-			           
-			           db.authorizeEmployee(id);
-			           
-			           JOptionPane.showMessageDialog(null, "An employee is authorized.");
-			           
-			           model.setRowCount(0);
-			           
-			           ArrayList<Employee> employees = new ArrayList<Employee>();
-			           
-			           employees = db.listemployees();
-						
-						if (employees != null ) {
-				            
-				            for (Employee emp : employees) {
-				                Object[] addEmployee = {emp.getId(),emp.getName(),emp.getLastName(),emp.getWage()};
-				                
-				                model.addRow(addEmployee);
-				               
-				            }
-				            
-				        }
-	
-			       }
-			}
-		});
-		btnAuthorizeEmployee.setForeground(Color.WHITE);
-		btnAuthorizeEmployee.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		btnAuthorizeEmployee.setBorder(null);
-		btnAuthorizeEmployee.setBackground(new Color(75, 0, 130));
-		btnAuthorizeEmployee.setBounds(342, 423, 144, 45);
-		pnlEmployee.add(btnAuthorizeEmployee);
-		
-		txtSearch = new JTextField();
-		txtSearch.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyReleased(KeyEvent e) {
-				
-				String search = txtSearch.getText();
-				
-				TableRowSorter<DefaultTableModel> tr = new TableRowSorter<DefaultTableModel>(model);
-		        
-		        
-		        empTable.setRowSorter(tr);
-		        
-		        
-		        tr.setRowFilter(RowFilter.regexFilter(search));
-			}
-		});
-		txtSearch.addFocusListener(new FocusAdapter() {
-			@Override
-			public void focusGained(FocusEvent e) {
-				
-				if(txtSearch.getText().equals("Search")) {
-					txtSearch.setText("");
-				}
-				
-			}
-			@Override
-			public void focusLost(FocusEvent e) {
-				if(txtSearch.getText().equals("")) {
-					txtSearch.setText("Search");
-				}
-			}
-		});
-		
-		txtSearch.setBorder(null);
-		txtSearch.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		txtSearch.setText("Search");
-		txtSearch.setBounds(89, 34, 438, 30);
-		pnlEmployee.add(txtSearch);
-		txtSearch.setColumns(10);
-		
-		JLabel lblSearch = new JLabel("");
-		lblSearch.setIcon(new ImageIcon(AuthorizedMenu.class.getResource("/icons/icons8-google-web-search-filled-40.png")));
-		lblSearch.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-		lblSearch.setBounds(34, 27, 40, 45);
-		pnlEmployee.add(lblSearch);
-		
-		JSeparator separator = new JSeparator();
-		separator.setForeground(new Color(75, 0, 130));
-		separator.setBounds(90, 64, 437, 4);
-		pnlEmployee.add(separator);
-		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBorder(new MatteBorder(4, 0, 4, 4, (Color) new Color(75, 0, 130)));
-		scrollPane.setForeground(Color.WHITE);
-		scrollPane.setBackground(new Color(255, 255, 255));
-		scrollPane.setBounds(0, 83, 616, 217);
-		pnlEmployee.add(scrollPane);
-		
-		empTable = new JTable();
-		empTable.setForeground(new Color(105, 105, 105));
-		scrollPane.setViewportView(empTable);
-		empTable.setFont(new Font("Segoe UI", Font.BOLD, 14));
-		empTable.setBorder(null);
-		empTable.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"Id", "Name", "Last Name","Wage"
-			}
-		) {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
-			boolean[] columnEditables = new boolean[] {
-				false, false, false, false
-			};
-			public boolean isCellEditable(int row, int column) {
-				return columnEditables[column];
-			}
-		});
-		
-		JButton btnUpdateWage = new JButton("Update Wage");
-		btnUpdateWage.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-				int selectedrow = empTable.getSelectedRow();
-				
-				 if (selectedrow == -1) {
-			           if (model.getRowCount() == 0 ) {
-			               JOptionPane.showMessageDialog(null,"Table is empty.");
-			           }
-			           else {
-			        	   JOptionPane.showMessageDialog(null,"Please select a row.");
-			           }
-			      
-			       }
-			       else {
-			           int id = (int)model.getValueAt(selectedrow,0);
-			           double wage = Double.parseDouble(JOptionPane.showInputDialog("Enter wage"));
-			           
-			           
-			           db.updateEmployee(id,wage);
-			           
-			           JOptionPane.showMessageDialog(null, "An employee is updated.");
-			           
-			           model.setRowCount(0);
-			           
-			           ArrayList<Employee> employees = new ArrayList<Employee>();
-			           
-			           employees = db.listemployees();
-						
-						if (employees != null ) {
-				            
-				            for (Employee emp : employees) {
-				                Object[] addEmployee = {emp.getId(),emp.getName(),emp.getLastName(),emp.getWage()};
-				                
-				                model.addRow(addEmployee);
-				               
-				            }
-				            
-				        }
-	
-			       }
-			}
-		});
-		btnUpdateWage.setForeground(Color.WHITE);
-		btnUpdateWage.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		btnUpdateWage.setBorder(null);
-		btnUpdateWage.setBackground(new Color(75, 0, 130));
-		btnUpdateWage.setBounds(34, 423, 144, 45);
-		pnlEmployee.add(btnUpdateWage);
-		
-		JLabel label_2 = new JLabel("");
-		label_2.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				System.exit(0);
-			}
-		});
-		label_2.setIcon(new ImageIcon(AuthorizedMenu.class.getResource("/icons/icons8-cancel-filled-40.png")));
-		label_2.setBounds(572, 2, 40, 47);
-		pnlEmployee.add(label_2);
 		
 		pnlEmpty = new JPanel();
 		pnlEmpty.setBorder(new MatteBorder(4, 0, 4, 4, (Color) new Color(75, 0, 130)));

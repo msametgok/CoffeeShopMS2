@@ -207,7 +207,7 @@ public ArrayList<Product> listproducts() {
 	            double price  = rs.getDouble(4);
 	            int stock = rs.getInt(5);
 	            
-	            products.add(new Product(p_id, category, prdname, price,stock));     
+	            products.add(new Product(p_id, category, prdname, price,stock)); 
 	            
 	        }
 	        
@@ -276,6 +276,126 @@ String myQuery = "CALL UpdateProduct(?,?)";
 	}
 	
 }
+
+public ArrayList<String> listSelectedCategory(String cat) {
+	
+	ArrayList<String> products = new ArrayList<String>();
+	String myQuery = "Select P_Name from products p inner join category c on p.Cat_ID = c.Cat_Id where Cat_Name = ? ";
+	try {
+		preparedStatement = con.prepareStatement(myQuery);
+		
+		preparedStatement.setString(1, cat);
+		
+		ResultSet rs =  preparedStatement.executeQuery();
+		
+		while(rs.next()) {
+           
+            String category = rs.getString(1);
+        
+            products.add(category);     
+            
+        }
+		
+		return products;
+		
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		return null;
+	}
+	
+	
+	
+	
+	
+}
+
+public double getPrdc(String prname) {
+	String myQuery = "Select P_Price from products where P_Name=?";
+	
+	try {
+		preparedStatement=con.prepareStatement(myQuery);
+		
+		preparedStatement.setString(1, prname);
+		
+		ResultSet rs =preparedStatement.executeQuery();
+		
+		rs.next();
+		
+		double prc = rs.getDouble(1);
+		
+		return prc;
+		
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		return 0;
+	}
+}
+
+public void ordersTable(int id, String prdname, double prdprice, int quantity) {
+	
+	String myQuery="Insert into orders (P_ID,P_Name,P_Price,Quantity) values(?,?,?,?)";
+	
+	try {
+		preparedStatement = con.prepareStatement(myQuery);
+		
+		preparedStatement.setInt(1, id);
+        preparedStatement.setString(2, prdname);
+        preparedStatement.setDouble(3, prdprice);  
+        preparedStatement.setInt(4, quantity);
+        
+        preparedStatement.executeUpdate();
+		
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	
+}
+
+public int getId(String prdct) {
+	
+String myQuery = "Select P_ID from products where P_Name=?";
+	
+	try {
+		preparedStatement=con.prepareStatement(myQuery);
+		
+		preparedStatement.setString(1, prdct);
+		
+		ResultSet rs =preparedStatement.executeQuery();
+		
+		rs.next();
+		
+		int prc = rs.getInt(1);
+		
+		return prc;
+		
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		return 0;
+	}
+}
+
+public void updateStock(String prdname, int quantity) {
+	
+	String myQuery = "Call updateStock(?,?)";
+	
+	try {
+		preparedStatement = con.prepareStatement(myQuery);
+		
+		preparedStatement.setString(1, prdname);
+		preparedStatement.setInt(2, quantity);
+		preparedStatement.executeQuery();
+		
+	} catch (SQLException e) {
+		
+		e.printStackTrace();
+	}
+}
+
+
 
 
 	
