@@ -38,7 +38,7 @@ public class SignMenu extends JFrame {
 	DBOperations db = new DBOperations();
 	
 	private JPanel contentPane;
-	 JTextField txtUserName;
+	private JTextField txtUserName;
 	private JPasswordField pwdPassword;
 
 	/**
