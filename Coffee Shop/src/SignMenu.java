@@ -38,7 +38,7 @@ public class SignMenu extends JFrame {
 	DBOperations db = new DBOperations();
 	
 	private JPanel contentPane;
-	private JTextField txtUserName;
+	 JTextField txtUserName;
 	private JPasswordField pwdPassword;
 
 	/**
@@ -176,7 +176,9 @@ public class SignMenu extends JFrame {
 					autmenu.setVisible(true);
 				}
 				else if(isStaff) {
-					JOptionPane.showMessageDialog(null,"Staff");
+					dispose();
+					Sale salemenu = new Sale();
+					salemenu.setVisible(true);
 				}
 				else {
 					JOptionPane.showMessageDialog(null, "Wrong Username or Password. Try Again.");

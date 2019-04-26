@@ -382,9 +382,9 @@ String myQuery = "Select P_ID from products where P_Name=?";
 		
 		rs.next();
 		
-		int prc = rs.getInt(1);
+		int prdctId = rs.getInt(1);
 		
-		return prc;
+		return prdctId;
 		
 	} catch (SQLException e) {
 		// TODO Auto-generated catch block
@@ -422,9 +422,9 @@ String myQuery = "Select Stock from products where P_Name=?";
 		
 		rs.next();
 		
-		int prc = rs.getInt(1);
+		int stock = rs.getInt(1);
 		
-		return prc;
+		return stock;
 		
 	} catch (SQLException e) {
 		// TODO Auto-generated catch block
@@ -453,11 +453,9 @@ ArrayList<Employee> employees = new ArrayList<Employee>();
             String password = rs.getString(6);
             boolean authority = rs.getBoolean(7);
            
-            
-            
+    
             employees.add(new Employee(id, name, lastname, wage, username, password, authority));
-            
-            
+                  
         }
         
         return employees;
@@ -471,10 +469,53 @@ ArrayList<Employee> employees = new ArrayList<Employee>();
 	
 }
 
-
-
-
-
+public ArrayList<Orders> listorders() {
 	
+	ArrayList<Orders> history = new ArrayList<Orders>();
+	
+	try {
+		
+		statement = con.createStatement();
+		String myQuery =  "Select * from ListOrders"; 
+        ResultSet rs =  statement.executeQuery(myQuery);
+        
+        while(rs.next()) {
+            int p_id = rs.getInt(1);
+            String prdname = rs.getString(2);
+            double price  = rs.getDouble(3);
+            int quantity = rs.getInt(4);
+            
+            history.add(new Orders(p_id, prdname, price,quantity)); 
+            
+        }
+        
+        return history;
+		
+	} catch (SQLException e) {
+		
+		e.printStackTrace();
+		return null;
+	}
 	
 }
+
+public void addStock(String prdname, int addedStock) {
+
+String myQuery="Update products set Stock = (Stock + ?) where P_Name = ?";
+	
+	try {
+		preparedStatement = con.prepareStatement(myQuery);
+		
+		preparedStatement.setInt(1, addedStock);
+        preparedStatement.setString(2, prdname);
+        
+        preparedStatement.executeUpdate();
+		
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	
+}
+}
+

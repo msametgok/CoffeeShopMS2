@@ -87,7 +87,7 @@ public class Sale extends JFrame {
 		
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBorder(new MatteBorder(1, 4, 1, 4, (Color) new Color(75, 0, 130)));
-		scrollPane.setBounds(0, 83, 329, 138);
+		scrollPane.setBounds(0, 83, 329, 178);
 		pnlBill.add(scrollPane);
 		
 		CartTable = new JTable();
@@ -105,6 +105,7 @@ public class Sale extends JFrame {
 				return columnEditables[column];
 			}
 		});
+		CartTable.getColumnModel().getColumn(0).setPreferredWidth(135);
 		CartTable.setForeground(new Color(105, 105, 105));
 		CartTable.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		scrollPane.setViewportView(CartTable);
@@ -116,6 +117,20 @@ public class Sale extends JFrame {
 		pnlBill.add(lblCart);
 		
 		JButton btnPay = new JButton("Pay");
+		btnPay.setBorder(new MatteBorder(2, 2, 2, 2, (Color) new Color(255, 255, 255)));
+		btnPay.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				btnPay.setBackground(new Color(255,255,255));
+				btnPay.setForeground(new Color(75,0,130));
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				
+				btnPay.setBackground(new Color(75,0,130));
+				btnPay.setForeground(new Color(255,255,255));
+			}
+		});
 		btnPay.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -158,22 +173,22 @@ public class Sale extends JFrame {
 				
 			}
 		);
-		btnPay.setForeground(new Color(75, 0, 130));
+		btnPay.setForeground(new Color(255, 255, 255));
 		btnPay.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-		btnPay.setBackground(new Color(255, 255, 255));
-		btnPay.setBounds(97, 385, 138, 37);
+		btnPay.setBackground(new Color(75, 0, 130));
+		btnPay.setBounds(103, 360, 138, 37);
 		pnlBill.add(btnPay);
 		
 		JLabel lblTtl = new JLabel("Total :");
 		lblTtl.setForeground(new Color(255, 255, 255));
 		lblTtl.setFont(new Font("Segoe UI", Font.PLAIN, 18));
-		lblTtl.setBounds(207, 232, 56, 25);
+		lblTtl.setBounds(209, 272, 56, 25);
 		pnlBill.add(lblTtl);
 		
 		lblTotal = new JLabel("");
 		lblTotal.setForeground(new Color(255, 255, 255));
 		lblTotal.setFont(new Font("Segoe UI", Font.PLAIN, 20));
-		lblTotal.setBounds(261, 232, 68, 25);
+		lblTotal.setBounds(261, 272, 68, 25);
 		pnlBill.add(lblTotal);
 		pnlOrder.setBorder(new MatteBorder(4, 0, 4, 4, (Color) new Color(75, 0, 130)));
 		pnlOrder.setBackground(new Color(255, 255, 255));
