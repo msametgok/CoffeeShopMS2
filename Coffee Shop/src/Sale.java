@@ -407,19 +407,28 @@ public class Sale extends JFrame {
 					
 					
 					double price =db.getPrdc(prdct);
+					int stock = db.getStock(prdct);
 					
-					
-				    Object[] obj = {prdct,price,orders};
-					
-			       
-			        total+=price*orders;
-					
-					model.insertRow(0, obj);
-					
-			        lblTotal.setText(""+total);
+					if(stock<orders) {
+						JOptionPane.showMessageDialog(null, "Not enough Stock");
+						
+					}
+					else {
+						
+						
+						Object[] obj = {prdct,price,orders};
+						
+					       
+				        total+=price*orders;
+						
+						model.insertRow(0, obj);
+						
+				        lblTotal.setText(""+total);
 
-					
-					txtOrder.setText("");
+						
+						txtOrder.setText("");
+					}
+				    
 					
 					
 					

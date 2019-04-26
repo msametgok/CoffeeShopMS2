@@ -85,7 +85,7 @@ public ArrayList<Employee> listemployees() {
 	try {
 		
 		statement = con.createStatement();
-        String myQuery =  "Select Emp_ID, Name, LastName, Wage,UserName, Password,Authority,Situation from employee where Situation = 1";
+        String myQuery =  "Select * from List";
         
         ResultSet rs =  statement.executeQuery(myQuery);
         
@@ -97,10 +97,10 @@ public ArrayList<Employee> listemployees() {
             String username = rs.getString(5);
             String password = rs.getString(6);
             boolean authority = rs.getBoolean(7);
-            boolean situation = rs.getBoolean(8);
+           
             
             
-            employees.add(new Employee(id, name, lastname, wage, username, password, authority, situation));
+            employees.add(new Employee(id, name, lastname, wage, username, password, authority));
             
             
         }
@@ -117,9 +117,9 @@ public ArrayList<Employee> listemployees() {
 	
 }
 
-public void addEmployee(String name, String lastname, double wage, String username, String password, boolean authority, boolean situation) {
+public void addEmployee(String name, String lastname, double wage, String username, String password, boolean authority) {
     
-    String myQuery = "Insert Into employee (Name,LastName,Wage,UserName,Password,Authority,Situation) VALUES (?,?,?,?,?,?,?) ";  
+    String myQuery = "Insert Into employee (Name,LastName,Wage,UserName,Password,Authority) VALUES (?,?,?,?,?,?) ";  
      
         try {
 			preparedStatement = con.prepareStatement(myQuery);
@@ -130,7 +130,7 @@ public void addEmployee(String name, String lastname, double wage, String userna
 	        preparedStatement.setString(4, username);
 	        preparedStatement.setString(5, password);
 	        preparedStatement.setBoolean(6, authority);
-	        preparedStatement.setBoolean(7, situation);
+	        
 	        
 	        preparedStatement.executeUpdate();
 			
@@ -143,7 +143,7 @@ public void addEmployee(String name, String lastname, double wage, String userna
 
 public void deleteEmployee(int id) {
 	
-	String myQuery = "Update employee set situation = 0 where Emp_ID = ?";
+	String myQuery = "delete from employee where Emp_ID = ?";
 	
 		try {
 			preparedStatement = con.prepareStatement(myQuery);
@@ -188,6 +188,24 @@ public void authorizeEmployee(int id) {
 			e.printStackTrace();
 		}
 	
+	
+}
+
+public void nonAuthorizeEmployee(int id) {
+	
+	String myQuery = "Update employee set Authority = 0 where Emp_ID = ?";
+	
+	try {
+		preparedStatement = con.prepareStatement(myQuery);
+		preparedStatement.setInt(1,id);
+		preparedStatement.executeUpdate();
+		
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+
+	
 }
 
 public ArrayList<Product> listproducts() {
@@ -197,7 +215,7 @@ public ArrayList<Product> listproducts() {
 		try {
 			
 			statement = con.createStatement();
-			String myQuery =  "SELECT P_ID,Cat_Name,P_Name,P_Price,Stock from products p inner join category c on p.Cat_ID=c.Cat_ID"; 
+			String myQuery =  "Select * from ListProduct"; 
 	        ResultSet rs =  statement.executeQuery(myQuery);
 	        
 	        while(rs.next()) {
@@ -302,16 +320,13 @@ public ArrayList<String> listSelectedCategory(String cat) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 		return null;
-	}
-	
-	
-	
+	}	
 	
 	
 }
 
 public double getPrdc(String prname) {
-	String myQuery = "Select P_Price from products where P_Name=?";
+	String myQuery = "SELECT DISTINCT getPRice(?) from products";
 	
 	try {
 		preparedStatement=con.prepareStatement(myQuery);
@@ -394,6 +409,68 @@ public void updateStock(String prdname, int quantity) {
 		e.printStackTrace();
 	}
 }
+
+public int getStock(String prdct) {
+String myQuery = "Select Stock from products where P_Name=?";
+	
+	try {
+		preparedStatement=con.prepareStatement(myQuery);
+		
+		preparedStatement.setString(1, prdct);
+		
+		ResultSet rs =preparedStatement.executeQuery();
+		
+		rs.next();
+		
+		int prc = rs.getInt(1);
+		
+		return prc;
+		
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		return 0;
+	}
+}
+
+public ArrayList<Employee> oldlistemployees() {
+	
+ArrayList<Employee> employees = new ArrayList<Employee>();
+	
+	try {
+		
+		statement = con.createStatement();
+        String myQuery =  "Select * from oldemployees";
+        
+        ResultSet rs =  statement.executeQuery(myQuery);
+        
+        while(rs.next()) {
+            int id = rs.getInt(1);
+            String name = rs.getString(2);
+            String lastname = rs.getString(3);
+            double wage  = rs.getDouble(4);
+            String username = rs.getString(5);
+            String password = rs.getString(6);
+            boolean authority = rs.getBoolean(7);
+           
+            
+            
+            employees.add(new Employee(id, name, lastname, wage, username, password, authority));
+            
+            
+        }
+        
+        return employees;
+		
+		
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+		return null;
+	}
+	
+}
+
 
 
 

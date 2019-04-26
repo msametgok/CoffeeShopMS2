@@ -7,10 +7,10 @@ public class Employee {
 	private String username;
 	private String password;
 	private boolean authority;
-	private boolean situation;
+	//private boolean situation;
 	
 	Employee(int id, String name, String lastName, double wage, String username,
-				String password, boolean authority, boolean situation){
+				String password, boolean authority){
 	
 		this.id=id;
 		this.name=name;
@@ -19,15 +19,11 @@ public class Employee {
 		this.username=username;
 		this.password=password;
 		this.authority=authority;
-		this.situation=situation;
+		//this.situation=situation;
 	}
 
 	public int getId() {
 		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public String getName() {
@@ -60,6 +56,22 @@ public class Employee {
 
 	public void setAuthority(boolean authority) {
 		this.authority = authority;
+	}
+
+	public String getUsername() {
+		return username;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 }

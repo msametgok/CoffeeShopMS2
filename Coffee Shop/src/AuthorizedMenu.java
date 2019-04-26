@@ -149,7 +149,18 @@ public class AuthorizedMenu extends JFrame {
 				if (employees != null ) {
 		            
 		            for (Employee emp : employees) {
-		                Object[] addEmployee = {emp.getId(),emp.getName(),emp.getLastName(),emp.getWage()};
+		            	
+		            	String aut;
+		            	
+		            	if(emp.isAuthority()==true) {
+
+		            			aut = "Manager";
+		            	}
+		            	else {
+		            			aut= "Staff"; 
+		            	}
+		            	
+		                Object[] addEmployee = {aut,emp.getId(),emp.getName(),emp.getLastName(),emp.getWage()};
 		                
 		                model.addRow(addEmployee);
 		               
@@ -346,7 +357,7 @@ public class AuthorizedMenu extends JFrame {
 			      
 			       }
 			       else {
-			           int id = (int)empTable.getValueAt(selectedrow,0);
+			           int id = (int)empTable.getValueAt(selectedrow,1);
 			           
 			           db.deleteEmployee(id);
 			           
@@ -361,12 +372,21 @@ public class AuthorizedMenu extends JFrame {
 						if (employees != null ) {
 				            
 				            for (Employee emp : employees) {
-				                Object[] addEmployee = {emp.getId(),emp.getName(),emp.getLastName(),emp.getWage()};
+				            	String aut;
+				            	
+				            	if(emp.isAuthority()==true) {
+
+				            			aut = "Manager";
+				            	}
+				            	else {
+				            			aut= "Staff"; 
+				            	}
+				            	
+				                Object[] addEmployee = {aut,emp.getId(),emp.getName(),emp.getLastName(),emp.getWage()};
 				                
 				                model.addRow(addEmployee);
 				               
-				            }
-				            
+				            }      
 				        }
 			           
 			       }
@@ -376,7 +396,7 @@ public class AuthorizedMenu extends JFrame {
 		btnDeleteEmployee.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		btnDeleteEmployee.setBorder(null);
 		btnDeleteEmployee.setBackground(new Color(75, 0, 130));
-		btnDeleteEmployee.setBounds(188, 423, 144, 45);
+		btnDeleteEmployee.setBounds(157, 423, 144, 45);
 		pnlEmployee.add(btnDeleteEmployee);
 		
 		JButton btnAuthorizeEmployee = new JButton("Authorize Employee");
@@ -395,13 +415,13 @@ public class AuthorizedMenu extends JFrame {
 			      
 			       }
 			       else {
-			           int id = (int)empTable.getValueAt(selectedrow,0);
+			           int id = (int)empTable.getValueAt(selectedrow,1);
 			          
 			           
 			           
 			           db.authorizeEmployee(id);
 			           
-			           JOptionPane.showMessageDialog(null, "An employee is authorized.");
+			           JOptionPane.showMessageDialog(null, "An employee is authorized and wage is updated to 10000");
 			           
 			           model.setRowCount(0);
 			           
@@ -412,7 +432,17 @@ public class AuthorizedMenu extends JFrame {
 						if (employees != null ) {
 				            
 				            for (Employee emp : employees) {
-				                Object[] addEmployee = {emp.getId(),emp.getName(),emp.getLastName(),emp.getWage()};
+				            	String aut;
+				            	
+				            	if(emp.isAuthority()==true) {
+
+				            			aut = "Manager";
+				            	}
+				            	else {
+				            			aut= "Staff"; 
+				            	}
+				            	
+				                Object[] addEmployee = {aut,emp.getId(),emp.getName(),emp.getLastName(),emp.getWage()};
 				                
 				                model.addRow(addEmployee);
 				               
@@ -427,7 +457,7 @@ public class AuthorizedMenu extends JFrame {
 		btnAuthorizeEmployee.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		btnAuthorizeEmployee.setBorder(null);
 		btnAuthorizeEmployee.setBackground(new Color(75, 0, 130));
-		btnAuthorizeEmployee.setBounds(342, 423, 144, 45);
+		btnAuthorizeEmployee.setBounds(311, 423, 144, 45);
 		pnlEmployee.add(btnAuthorizeEmployee);
 		
 		txtSearch = new JTextField();
@@ -497,15 +527,11 @@ public class AuthorizedMenu extends JFrame {
 			new Object[][] {
 			},
 			new String[] {
-				"Id", "Name", "Last Name","Wage"
+				"Authority", "Id", "Name", "Last Name", "Wage"
 			}
 		) {
-			/**
-			 * 
-			 */
-			private static final long serialVersionUID = 1L;
 			boolean[] columnEditables = new boolean[] {
-				false, false, false, false
+				false, true, true, true, true
 			};
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
@@ -528,7 +554,7 @@ public class AuthorizedMenu extends JFrame {
 			      
 			       }
 			       else {
-			           int id = (int)empTable.getValueAt(selectedrow,0);
+			           int id = (int)empTable.getValueAt(selectedrow,1);
 			           double wage = Double.parseDouble(JOptionPane.showInputDialog("Enter wage"));
 			           
 			           
@@ -545,7 +571,17 @@ public class AuthorizedMenu extends JFrame {
 						if (employees != null ) {
 				            
 				            for (Employee emp : employees) {
-				                Object[] addEmployee = {emp.getId(),emp.getName(),emp.getLastName(),emp.getWage()};
+				            	String aut;
+				            	
+				            	if(emp.isAuthority()==true) {
+
+				            			aut = "Manager";
+				            	}
+				            	else {
+				            			aut= "Staff"; 
+				            	}
+				            	
+				                Object[] addEmployee = {aut,emp.getId(),emp.getName(),emp.getLastName(),emp.getWage()};
 				                
 				                model.addRow(addEmployee);
 				               
@@ -560,7 +596,7 @@ public class AuthorizedMenu extends JFrame {
 		btnUpdateWage.setFont(new Font("Segoe UI", Font.PLAIN, 16));
 		btnUpdateWage.setBorder(null);
 		btnUpdateWage.setBackground(new Color(75, 0, 130));
-		btnUpdateWage.setBounds(34, 423, 144, 45);
+		btnUpdateWage.setBounds(5, 423, 144, 45);
 		pnlEmployee.add(btnUpdateWage);
 		
 		JLabel label_2 = new JLabel("");
@@ -573,6 +609,154 @@ public class AuthorizedMenu extends JFrame {
 		label_2.setIcon(new ImageIcon(AuthorizedMenu.class.getResource("/icons/icons8-cancel-filled-40.png")));
 		label_2.setBounds(572, 2, 40, 47);
 		pnlEmployee.add(label_2);
+		
+		JButton btnNonauthorize = new JButton("Non-Authorize");
+		btnNonauthorize.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				 int selectedrow = empTable.getSelectedRow();
+					
+				 if (selectedrow == -1) {
+			           if (model.getRowCount() == 0 ) {
+			               JOptionPane.showMessageDialog(null,"Table is empty.");
+			           }
+			           else {
+			        	   JOptionPane.showMessageDialog(null,"Please select a row.");
+			           }
+			      
+			       }
+			       else {
+			           int id = (int)empTable.getValueAt(selectedrow,1);
+			          
+			           
+			           
+			           db.nonAuthorizeEmployee(id);
+			           
+			           JOptionPane.showMessageDialog(null, "An employee is non-authorized.");
+			           
+			           model.setRowCount(0);
+			           
+			           ArrayList<Employee> employees = new ArrayList<Employee>();
+			           
+			           employees = db.listemployees();
+						
+						if (employees != null ) {
+				            
+				            for (Employee emp : employees) {
+				            	String aut;
+				            	
+				            	if(emp.isAuthority()==true) {
+
+				            			aut = "Manager";
+				            	}
+				            	else {
+				            			aut= "Staff"; 
+				            	}
+				            	
+				                Object[] addEmployee = {aut,emp.getId(),emp.getName(),emp.getLastName(),emp.getWage()};
+				                
+				                model.addRow(addEmployee);
+				               
+				            }
+				            
+				        }
+	
+			       }
+			}
+		});
+		btnNonauthorize.setForeground(Color.WHITE);
+		btnNonauthorize.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+		btnNonauthorize.setBorder(null);
+		btnNonauthorize.setBackground(new Color(75, 0, 130));
+		btnNonauthorize.setBounds(465, 423, 144, 45);
+		pnlEmployee.add(btnNonauthorize);
+		
+		JButton btnOldEmp = new JButton(">");
+		btnOldEmp.setVerticalAlignment(SwingConstants.TOP);
+		btnOldEmp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				model = (DefaultTableModel) empTable.getModel();
+				model.setRowCount(0);
+				
+				
+				ArrayList<Employee> oldemployees = new ArrayList<Employee>();
+				
+				oldemployees = db.oldlistemployees();
+				
+				
+				
+				if (oldemployees != null ) {
+		            
+		            for (Employee emp : oldemployees) {
+		            	
+		            	String aut;
+		            	
+		            	if(emp.isAuthority()==true) {
+
+		            			aut = "Manager";
+		            	}
+		            	else {
+		            			aut= "Staff"; 
+		            	}
+		            	
+		                Object[] addoldEmployee = {aut,emp.getId(),emp.getName(),emp.getLastName(),emp.getWage()};
+		                
+		                model.addRow(addoldEmployee);
+		               
+		            }
+		            
+		        }
+			}
+		});
+		btnOldEmp.setForeground(Color.WHITE);
+		btnOldEmp.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		btnOldEmp.setBorder(null);
+		btnOldEmp.setBackground(new Color(75, 0, 130));
+		btnOldEmp.setBounds(558, 311, 30, 30);
+		pnlEmployee.add(btnOldEmp);
+		
+		JButton btnPre = new JButton("<");
+		btnPre.setVerticalAlignment(SwingConstants.TOP);
+		btnPre.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				model = (DefaultTableModel) empTable.getModel();
+				model.setRowCount(0);
+				
+				
+				ArrayList<Employee> employees = new ArrayList<Employee>();
+				
+				employees = db.listemployees();
+				
+				if (employees != null ) {
+		            
+		            for (Employee emp : employees) {
+		            	
+		            	String aut;
+		            	
+		            	if(emp.isAuthority()==true) {
+
+		            			aut = "Manager";
+		            	}
+		            	else {
+		            			aut= "Staff"; 
+		            	}
+		            	
+		                Object[] addEmployee = {aut,emp.getId(),emp.getName(),emp.getLastName(),emp.getWage()};
+		                
+		                model.addRow(addEmployee);
+		               
+		            }
+		            
+		        }
+			}
+		});
+		btnPre.setForeground(Color.WHITE);
+		btnPre.setFont(new Font("Segoe UI", Font.BOLD, 20));
+		btnPre.setBorder(null);
+		btnPre.setBackground(new Color(75, 0, 130));
+		btnPre.setBounds(10, 311, 30, 30);
+		pnlEmployee.add(btnPre);
 		pnlProduct.setBounds(0, 0, 616, 479);
 		layeredPane.add(pnlProduct);
 		pnlProduct.setLayout(null);
@@ -732,7 +916,7 @@ public class AuthorizedMenu extends JFrame {
 			       }
 			       else {
 			           String prdname = (String) prdTable.getValueAt(selectedrow,2);
-			           JOptionPane.showMessageDialog(null, prdname);
+			           
 			           double price = Double.parseDouble(JOptionPane.showInputDialog("Enter price"));
 			           
 			           db.updateProduct(prdname,price);
@@ -1009,7 +1193,7 @@ public class AuthorizedMenu extends JFrame {
 				String password = new String(txtPassword.getPassword());
 				boolean authority = btnAuthority.isSelected();
 				
-				db.addEmployee(name, lastname, wage, username, password, authority, true);
+				db.addEmployee(name, lastname, wage, username, password, authority);
 				
 				JOptionPane.showMessageDialog(null,"New Employee Added to System");
 				
